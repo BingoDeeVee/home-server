@@ -1,0 +1,61 @@
+version: '3.1'
+
+services:
+
+  app:
+    image: nextcloud:26
+    container_name: nextcloud-app
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - nextcloud:/var/www/html
+      - ${ROOT_DIR}/docker/nextcloud/app/config:/var/www/html/config
+      - ${ROOT_DIR}/docker/nextcloud/app/custom_apps:/var/www/html/custom_apps
+      - ${ROOT_DIR}/docker/nextcloud/app/data:/var/www/html/data
+      - ${ROOT_DIR}/docker/nextcloud/app/themes:/var/www/html/themes
+    environment:
+    - REDIS_HOST=nextcloud-redis
+    - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_HOST_URL}
+    - APACHE_DISABLE_REWRITE_IP=1
+    - TRUSTED_PROXIES=172.16.0.6
+    - MYSQL_HOST=db
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=${MYSQL_USER}
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_HOST_URL}`)"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
+
+  db:
+    image: mariadb:10.11
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
+    container_name: nextcloud-mariadb
+    volumes:
+      - db:/var/lib/mysql:Z
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=YES
+      - MARIADB_DATABASE=nextcloud
+      - MARIADB_USER=${MYSQL_USER}
+      - MARIADB_PASSWORD=${MYSQL_PASSWORD}
+      - MARIADB_AUTO_UPGRADE=1
+      - MARIADB_DISABLE_UPGRADE_BACKUP=1
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.0
+    container_name: nextcloud-redis
+    volumes:
+      - ${ROOT_DIR}/docker/nextcloud/redis:/data
+    restart: unless-stopped
+
+volumes:
+  nextcloud:
+  db:
+
+env_file:
+  - path: ./nextcloud.env
+    required: true

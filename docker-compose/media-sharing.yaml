@@ -1,0 +1,71 @@
+version: '3.1'
+
+services:
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`${QBITTORRENT_HOST_URL}`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=myresolver"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+    volumes:
+      - ${ROOT_DIR}/docker/qbittorrent/appdata/config:/config
+      - ${ROOT_DIR}/docker/qbittorrent/downloads:/downloads
+      - ${ROOT_DIR}/media-library/Films:/films
+      - ${ROOT_DIR}/media-library/TV Shows:/tv-shows
+    expose:
+      - "8080"
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+  soulseek:
+    image: slskd/slskd
+    container_name: soulseek
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SLSKD_SHARED_DIR=/music
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.soulseek.rule=Host(`${SOULSEEK_HOST_URL}`)"
+      - "traefik.http.routers.soulseek.entrypoints=websecure"
+      - "traefik.http.routers.soulseek.tls.certresolver=myresolver"
+      - "traefik.http.routers.soulseek.middlewares=traefik-auth"
+      - "traefik.http.middlewares.soulseek-auth.basicauth.users=${SOULSEEK_BASIC_AUTH_CREDENTIALS}"
+    volumes:
+      - ${ROOT_DIR}/docker/soulseek/:/app
+      - ${ROOT_DIR}/media-library/Music:/music
+      - ${ROOT_DIR}/docker/media-automation/music-downloads:/app/downloads
+    expose:
+      - "5030"
+    ports:
+      - "50300:50300"
+    restart: unless-stopped
+
+  deemix:
+    image: registry.gitlab.com/bockiii/deemix-docker:2022.12.14-r222.5d447b6035
+    container_name: deemix
+    volumes:
+      - ${ROOT_DIR}/docker/media-automation/music-downloads:/downloads
+      - ${ROOT_DIR}/docker/media-streaming/deemix/config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DEEMIX_SINGLE_USER=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.deemix.rule=Host(`${DEEMIX_HOST_URL}`)"
+      - "traefik.http.routers.deemix.entrypoints=websecure"
+      - "traefik.http.routers.deemix.tls.certresolver=myresolver"
+    restart: unless-stopped

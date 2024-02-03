@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - PLEX_CLAIM=${PLEX_CLAIM}
+    volumes:
+      - ${ROOT_DIR}/docker/media-streaming/plex:/config
+      - ${ROOT_DIR}/media-library/Music:/music
+      - ${ROOT_DIR}/media-library/Films:/films
+      - ${ROOT_DIR}/media-library/TV Shows:/tv-shows
+    restart: unless-stopped
+
