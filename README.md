@@ -5,6 +5,7 @@ TODO:
 - [x] Add root directory key to env files
 - [ ] Create Github secrets
 - [ ] Write build steps to create secret files
+- [ ] Sync compose file versions
 
 Notes:
 - The `env_file` and `.env` root file are different concepts. For using interpolated variables in the docker compose file, create a `.env` file for all your variables across all compose files. Seperate them out with commented sections if you like.
