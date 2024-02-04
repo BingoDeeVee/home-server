@@ -29,6 +29,3 @@ services:
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${BASIC_AUTH_CREDENTIALS}"
 
-env_file:
-  - path: ./traefik.env
-    required: true

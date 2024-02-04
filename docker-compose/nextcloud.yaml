@@ -55,7 +55,3 @@ services:
 volumes:
   nextcloud:
   db:
-
-env_file:
-  - path: ./nextcloud.env
-    required: true
