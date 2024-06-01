@@ -57,5 +57,3 @@ jobs:
           TRAEFIK_BASIC_AUTH_CREDENTIALS=$TRAEFIK_BASIC_AUTH_CREDENTIALS
           EOF
      
-      - shell: bash
-        run: cat docker-compose/.env
