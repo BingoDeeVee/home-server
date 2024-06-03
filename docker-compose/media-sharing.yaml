@@ -17,8 +17,8 @@ services:
       - "traefik.http.routers.qbittorrent.tls.certresolver=myresolver"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
     volumes:
-      - ${ROOT_DIR}/docker/qbittorrent/appdata/config:/config
-      - ${ROOT_DIR}/docker/qbittorrent/downloads:/downloads
+      - ${ROOT_DIR}/qbittorrent/appdata/config:/config
+      - ${ROOT_DIR}/qbittorrent/downloads:/downloads
       - ${ROOT_DIR}/media-library/Films:/films
       - ${ROOT_DIR}/media-library/TV Shows:/tv-shows
     expose:
@@ -44,9 +44,9 @@ services:
       - "traefik.http.routers.soulseek.middlewares=traefik-auth"
       - "traefik.http.middlewares.soulseek-auth.basicauth.users=${SOULSEEK_BASIC_AUTH_CREDENTIALS}"
     volumes:
-      - ${ROOT_DIR}/docker/soulseek/:/app
+      - ${ROOT_DIR}/soulseek/:/app
       - ${ROOT_DIR}/media-library/Music:/music
-      - ${ROOT_DIR}/docker/media-automation/music-downloads:/app/downloads
+      - ${ROOT_DIR}/media-automation/music-downloads:/app/downloads
     expose:
       - "5030"
     ports:
@@ -57,8 +57,8 @@ services:
     image: registry.gitlab.com/bockiii/deemix-docker:2022.12.14-r222.5d447b6035
     container_name: deemix
     volumes:
-      - ${ROOT_DIR}/docker/media-automation/music-downloads:/downloads
-      - ${ROOT_DIR}/docker/media-streaming/deemix/config:/config
+      - ${ROOT_DIR}/media-automation/music-downloads:/downloads
+      - ${ROOT_DIR}/media-streaming/deemix/config:/config
     environment:
       - PUID=1000
       - PGID=1000

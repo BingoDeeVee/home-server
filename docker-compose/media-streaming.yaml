@@ -12,7 +12,7 @@ services:
       - VERSION=docker
       - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
-      - ${ROOT_DIR}/docker/media-streaming/plex:/config
+      - ${ROOT_DIR}/media-streaming/plex:/config
       - ${ROOT_DIR}/media-library/Music:/music
       - ${ROOT_DIR}/media-library/Films:/films
       - ${ROOT_DIR}/media-library/TV Shows:/tv-shows
