@@ -2,18 +2,25 @@ name: cloud-storage
 
 services:
   syncthing:
-    image: syncthing/syncthing
+    image: lscr.io/linuxserver/syncthing:latest
     container_name: syncthing
     restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
+      - TZ=Etc/UTC
     volumes:
-      - ${ROOT_DIR}:/var/syncthing
+      - ${ROOT_DIR}/syncthing/data:/data
+      - ${ROOT_DIR}/syncthing/config:/config
     expose:
       - "8384" # WebUI
-      - "22000/tcp" # TCP File Transfers
-      - "22000/udp" # QUIC File Transfers
-      - "21027/udp" # Receive local discovery broadcasts
-
+    ports:
+      - 22000:22000/tcp # TCP File Transfers
+      - 22000:22000/udp # QUIC File Transfers
+      - 21027:21027/udp # Receive local discovery broadcasts
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.syncthing.rule=Host(`${SYNCTHING_HOST_URL}`)"
+      - "traefik.http.routers.syncthing.entrypoints=websecure"
+      - "traefik.http.routers.syncthing.tls.certresolver=myresolver"
     
