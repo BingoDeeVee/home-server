@@ -32,6 +32,7 @@ jobs:
           ACME_EMAIL: ${{ secrets.ACME_EMAIL }}
           TRAEFIK_HOST_URL: ${{ secrets.TRAEFIK_HOST_URL }}
           TRAEFIK_BASIC_AUTH_CREDENTIALS: ${{ secrets.TRAEFIK_BASIC_AUTH_CREDENTIALS }}
+          SYNCTHING_HOST_URL: ${{ secrets.SYNCTHING_HOST_URL}}
         run: |
           cat << EOF > docker-compose/.env
           # common
@@ -55,5 +56,8 @@ jobs:
           ACME_EMAIL=$ACME_EMAIL
           TRAEFIK_HOST_URL=$TRAEFIK_HOST_URL
           TRAEFIK_BASIC_AUTH_CREDENTIALS=$TRAEFIK_BASIC_AUTH_CREDENTIALS
+
+          # cloud_storage.yaml
+          SYNCTHING_HOST_URL=$SYNCTHING_HOST_URL
           EOF
      
