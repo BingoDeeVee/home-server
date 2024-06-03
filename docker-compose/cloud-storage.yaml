@@ -1,0 +1,19 @@
+name: cloud-storage
+
+services:
+  syncthing:
+    image: syncthing/syncthing
+    container_name: syncthing
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ${ROOT_DIR}:/var/syncthing
+    expose:
+      - "8384" # WebUI
+      - "22000/tcp" # TCP File Transfers
+      - "22000/udp" # QUIC File Transfers
+      - "21027/udp" # Receive local discovery broadcasts
+
+    
