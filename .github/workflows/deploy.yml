@@ -65,6 +65,7 @@ jobs:
 
           # cloud_storage.yaml
           SYNCTHING_HOST_URL=$SYNCTHING_HOST_URL
+          BAIKAL_HOST_URL=baikal.lab.home
           IMMICH_HOST_URL=$IMMICH_HOST_URL
           IMMICH_VERSION=$IMMICH_VERSION
           UPLOAD_LOCATION=$UPLOAD_LOCATION

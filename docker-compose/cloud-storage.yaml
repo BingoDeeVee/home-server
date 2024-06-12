@@ -23,7 +23,21 @@ services:
       - "traefik.http.routers.syncthing.rule=Host(`${SYNCTHING_HOST_URL}`)"
       - "traefik.http.routers.syncthing.entrypoints=websecure"
       - "traefik.http.routers.syncthing.tls.certresolver=myresolver"
-    
+  
+  baikal:
+    image: ckulka/baikal:nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - ${ROOT_DIR}/baikal/config:/var/www/baikal/config
+      - ${ROOT_DIR}/baikal/data:/var/www/baikal/Specific
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.baikal.rule=Host(`${BAIKAL_HOST_URL}`)"
+      - "traefik.http.routers.baikal.entrypoints=websecure"
+      - "traefik.http.routers.baikal.tls.certresolver=myresolver"
+
   
   immich-server:
     container_name: immich_server
