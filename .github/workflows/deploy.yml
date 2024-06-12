@@ -33,6 +33,12 @@ jobs:
           TRAEFIK_HOST_URL: ${{ secrets.TRAEFIK_HOST_URL }}
           TRAEFIK_BASIC_AUTH_CREDENTIALS: ${{ secrets.TRAEFIK_BASIC_AUTH_CREDENTIALS }}
           SYNCTHING_HOST_URL: ${{ secrets.SYNCTHING_HOST_URL}}
+          IMMICH_HOST_URL: ${{ secrets.IMMICH_HOST_URL }}
+          IMMICH_VERSION: ${{ secrets.IMMICH_VERSION }}
+          UPLOAD_LOCATION: ${{ secrets.UPLOAD_LOCATION }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_DATABASE_NAME: ${{ secrets.DB_DATABASE_NAME }}
         run: |
           cat << EOF > docker-compose/.env
           # common
@@ -59,5 +65,11 @@ jobs:
 
           # cloud_storage.yaml
           SYNCTHING_HOST_URL=$SYNCTHING_HOST_URL
+          IMMICH_HOST_URL=$IMMICH_HOST_URL
+          IMMICH_VERSION=$IMMICH_VERSION
+          UPLOAD_LOCATION=$UPLOAD_LOCATION
+          DB_PASSWORD=$DB_PASSWORD
+          DB_USERNAME=$DB_USERNAME
+          DB_DATABASE_NAME=$DB_DATABASE_NAME
           EOF
      
